@@ -144,7 +144,7 @@ private contacts: Contact[] = [
   async getContacts(): Promise<Contact[]> {
     await this.simulateDelay();
 
-    //throw new Error('Error fetching contacts');
+    throw new Error('Error fetching contacts');
 
     return [...this.contacts];
   }

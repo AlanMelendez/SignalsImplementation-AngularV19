@@ -153,9 +153,44 @@ mySignal = linkedSignal(()=> this.mySignal());
 
 ```
 
+# Effects
+## What is an Effect in Angular?
 
-## Screenshots
+An effect is a function that performs a side effect when a signal changes. (do something when a signal changes) 
+It is used to perform asynchronous operations such as fetching data from a server, updating the DOM, or dispatching actions to the store.
 
+These effect ever need be used in a component or service, declared in the constructor or within a function.
+
+**Syntax:** 
+```typescript
+
+mySignal = signal(2);
+
+public checkChanges = effect(() => {
+  const value = this.mySignal(); // Maybe you want to do something with the value (was changed to 3, for example...)
+
+  //Do something when the signal changes
+  console.log('Signal has changed to: ', value);
+});
+
+```
+
+**Example:** show toasts when a Fetch API has error response.
+```typescript
+
+  // Get data from the server
+   contactResource = resource({
+    request: this.id,
+    loader: ({request: id}) => this.apiService.getContact(Number(id))
+  });
+ 
+  showErrorMessage = effect(() => {
+     const error = this.contactsResource.error();
+     if (error) {
+       this.messageService.add({severity:'error', summary:'Error', detail: "Error fetching contacts"});
+     }
+  });
+```
 ## Screenshots
 
 ### Contact List

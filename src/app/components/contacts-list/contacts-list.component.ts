@@ -1,4 +1,4 @@
-import { Component, computed, inject, resource, signal } from '@angular/core';
+import { Component, computed, effect, inject, resource, signal } from '@angular/core';
 import { Contact } from '../../models/contact';
 import { CommonModule } from '@angular/common';
 import { MatListModule } from '@angular/material/list';
@@ -7,17 +7,21 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { RouterLink } from '@angular/router';
+import { Toast, ToastModule } from 'primeng/toast';
+import { MessageService } from 'primeng/api';
 
 @Component({
   selector: 'app-contacts-list',
-  imports: [CommonModule, MatListModule, MatProgressSpinnerModule, MatIconModule, MatButtonModule,  RouterLink],
+  imports: [CommonModule, MatListModule, MatProgressSpinnerModule, MatIconModule, MatButtonModule,  RouterLink, ToastModule],
   templateUrl: './contacts-list.component.html',
-  styleUrl: './contacts-list.component.scss'
+  styleUrl: './contacts-list.component.scss',
+  providers: [MessageService]
 })
 export class ContactsListComponent {
   apiService = inject(ApiService);
-  deletingSignal = signal<boolean>(false);
+  messageService = inject(MessageService);
 
+  deletingSignal = signal<boolean>(false);
   loadingSignal = computed(() => this.contactsResource.isLoading() || this.deletingSignal());
 
   contactsResource = resource({
@@ -30,6 +34,14 @@ export class ContactsListComponent {
     this.deletingSignal.set(false);
     this.contactsResource.reload(); //It's used 
   }
+
+  showErrorMessage = effect(() => {
+     const error = this.contactsResource.error();
+     if (error) {
+       this.messageService.add({severity:'error', summary:'Error', detail: "Error fetching contacts"});
+     }
+  });
+   
    
 
 }
