@@ -23,17 +23,11 @@ main{
   padding-top: 64px; /* Adjust based on toolbar height */
 
 }
-// .mat-progress-wrapper{ 
-//   position: absolute !important;
-//   z-index: -1;
-//   background-color: transparent; 
-//   width: 100% !important;
-//   height: 100% !important;
-// }
 mat-progress-spinner {
   z-index: 1000;
   position: absolute !important;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
+  background-color: white;
 }
