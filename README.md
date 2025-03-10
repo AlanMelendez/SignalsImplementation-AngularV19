@@ -3,7 +3,7 @@
 This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 19.2.1.
 # Project Structure
 Key files:
-- [List Contact Component](./src/app/components/contact-list/contact-list.component.ts)
+- [List Contact Component](./src/app/components/contacts-list/contacts-list.component.ts)
 - [Add Contact Component](./src/app/components/add-contact/add-contact.component.ts)
 - [Edit Contact Template](./src/app/components/edit-contact/edit-contact.component.html)
 - [API Service](./src/app/services/api.service.ts)
