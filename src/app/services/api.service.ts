@@ -144,7 +144,7 @@ private contacts: Contact[] = [
   async getContacts(): Promise<Contact[]> {
     await this.simulateDelay();
 
-    // throw new Error('Error fetching contacts');
+    //throw new Error('Error fetching contacts');
 
     return [...this.contacts];
   }
@@ -159,9 +159,9 @@ private contacts: Contact[] = [
     return newContact;
   }
 
-  async deleteContact(id: string): Promise<void> {
+  async deleteContact(id: number): Promise<void> {
     await this.simulateDelay();
-    this.contacts = this.contacts.filter((c) => c.id !== Number(id));
+    this.contacts = this.contacts.filter((c) => c.id !== id);
   }
 
   async updateContact(updatedContact: Contact): Promise<Contact> {

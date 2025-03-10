@@ -4,7 +4,25 @@
     <mat-list-item class="contact">
       <h3 matListItemTitle>{{ contact.name }}</h3>
       <p matListItemLine>{{ contact.email }}</p>
-      <p matListItemLine>{{ contact.phone }}</p>
+      
+      <div matListItemMeta>
+        <button mat-icon-button>
+          <mat-icon>edit</mat-icon>
+        </button>
+        <button mat-icon-button (click)="deleteContact(contact.id)">
+          <mat-icon>delete</mat-icon>
+        </button>
+      </div>
     </mat-list-item>
   }
-</mat-list>  
+</mat-list> 
+
+@if(contactsResource.isLoading() || this.deletingSignal()  ) { 
+  <div class="mat-progress-wrapper">
+    <mat-progress-spinner mode="indeterminate"></mat-progress-spinner>
+  </div>
+}@else if(contactsResource.error()) {
+  <p class="error">{{ contactsResource.error() }}</p>
+}@else {
+  <p class="empty">No contacts found</p>
+}

@@ -15,7 +15,7 @@ This project was generated using [Angular CLI](https://github.com/angular/angula
 - **Better Error Handling**: More descriptive error messages and stack traces.
 - **Updated Dependency Injection**: More flexible and powerful DI system. -->
 
-# Resourse
+# Resource
 ## What is a Resource in Angular?
 This functionallity allows asynchronous data fetching in our components implementation.
 
@@ -33,3 +33,31 @@ myResource.isLoading(); // returns boolean status.
 myResource.error(); // returns the error if the resource has an error
 
 ```
+# Computed Signal
+## What is a Computed Signal in Angular?
+This functionallity allows to create a signal that depends on other signals. When the signals it depends on change, the computed signal is automatically updated.
+
+To use a computed signal in Angular, we need to create a signal that depends on other signals. We can then use this signal in our component to display the computed value in the view.
+
+**Syntax:** 
+```typescript
+mySignal1 = signal(2);
+mySignal2 = signal(2);
+
+
+myComputedSignal = computed(() => {
+  return mySignal1.value() + mySignal2.value(); // 2 + 2 = 4
+});
+
+//Get the value of the computed signal
+myComputedSignal.value(); // returns 4
+
+//If the signals value change, the computed signal will be updated automatically.
+mySignal1.set(3);
+mySignal2.set(3);
+
+myComputedSignal.value(); // returns 6
+
+```
+
+
