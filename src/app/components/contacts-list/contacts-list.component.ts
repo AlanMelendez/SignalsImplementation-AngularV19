@@ -6,10 +6,11 @@ import { ApiService } from '../../services/api.service';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-contacts-list',
-  imports: [CommonModule, MatListModule, MatProgressSpinnerModule, MatIconModule, MatButtonModule],
+  imports: [CommonModule, MatListModule, MatProgressSpinnerModule, MatIconModule, MatButtonModule,  RouterLink],
   templateUrl: './contacts-list.component.html',
   styleUrl: './contacts-list.component.scss'
 })

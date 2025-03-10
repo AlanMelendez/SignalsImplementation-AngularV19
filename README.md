@@ -1,6 +1,11 @@
 # SignalsCrudAngularv19
 
 This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 19.2.1.
+# Project Structure
+Key files:
+- [Add Contact Component](./src/app/components/add-contact/add-contact.component.ts)
+- [Add Contact Template](./src/app/components/add-contact/add-contact.component.html)
+- [API Service](./src/app/services/api.service.ts)
 
 # Features in Angular v19
 
@@ -15,7 +20,7 @@ This project was generated using [Angular CLI](https://github.com/angular/angula
 - **Better Error Handling**: More descriptive error messages and stack traces.
 - **Updated Dependency Injection**: More flexible and powerful DI system. -->
 
-# Resource
+# Resource Signal
 ## What is a Resource in Angular?
 This functionallity allows asynchronous data fetching in our components implementation.
 
@@ -33,7 +38,7 @@ myResource.isLoading(); // returns boolean status.
 myResource.error(); // returns the error if the resource has an error
 
 ```
-# Computed Signal
+# Computed Signal 
 ## What is a Computed Signal in Angular?
 This functionallity allows to create a signal that depends on other signals. When the signals it depends on change, the computed signal is automatically updated.
 
@@ -61,5 +66,93 @@ mySignal2.set(3);
 myComputedSignal.value(); // returns 6
 
 ```
+
+
+# Input Signal (@Input & @Output)
+## What is an Input Signal in Angular?
+This functionallity allows to pass data from a parent component to a child component.
+
+To use an input signal in Angular, we need to create a signal in the parent component and pass it to the child component using the input() you need declare with default value.
+The input signal automatically updates in the child component when the parent component changes the signal value.
+
+No need use ngOnChanges to detect changes in the input signal. (It's the better way to avoid the use of ngOnChanges)
+
+**Syntax:** 
+```typescript
+//Parent Component
+inputSignal = input<string>('');
+
+//Child Component
+@Input() mySignal: Signal<number>;
+
+//Use the signal in the child component
+this.mySignal.value(); // returns 2
+
+```
+
+
+# Writable Signal
+## What is a Writable Signal in Angular?
+
+It's a **writable** signal that dependent on another signal.
+When the signal it depends on changes, the writable signal is automatically updated.
+
+This signal is major used in forms to update the value of the form fields.
+
+**Syntax:** 
+```typescript
+// Reactive signal linked on it's own signal
+mySignal = linkedSignal(()=> this.mySignal());
+
+```
+
+**Example 01:** 
+```typescript
+
+  apiService = inject(ApiService);
+  id = input<string('1');
+
+  name = linkedSignal(() => this.contactResource.value()?.name);
+  email = linkedSignal(() => this.contactResource.value()?.email);
+  phone = linkedSignal(() => this.contactResource.value()?.phone);
+
+   contactResource = resource({
+    request: this.id,
+    loader: ({request: id}) => this.apiService.getContact(Number(id))
+  });
+
+```
+
+**Example 02:** 
+```typescript
+
+    apiService = inject(ApiService);
+    id = input<string('1');
+
+   constructor() {
+    //Set data to the form fields with type ContactForm and linked to the contactResource signal
+    this.formData = linkedSignal(() => ({
+      name: this.contactResource.value()?.name || '',
+      email: this.contactResource.value()?.email || '',
+      phone: this.contactResource.value()?.phone || ''
+    }));
+  }
+
+  // This signal is a object that contains the form fields with type ContactForm
+  protected  formData = signal<ContactForm>({
+    name: '',
+    email: '',
+    phone: ''
+  });
+
+  // Get data from the server
+   contactResource = resource({
+    request: this.id,
+    loader: ({request: id}) => this.apiService.getContact(Number(id))
+  });
+
+```
+
+
 
 

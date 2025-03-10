@@ -174,9 +174,9 @@ private contacts: Contact[] = [
     return updatedContact;
   }
 
-  async getContact(id: string): Promise<Contact> {
+  async getContact(id: number): Promise<Contact> {
     await this.simulateDelay();
-    const contact = this.contacts.find((c) => c.id === Number(id));
+    const contact = this.contacts.find((c) => c.id === id);
     if (!contact) {
       throw new Error('Contact not found');
     }
