@@ -1,7 +1,9 @@
-<mat-toolbar
->My Contacts
-<button mat-icon-button routerLink="/add">
-  <mat-icon>add_circle</mat-icon>
-</button>
+<mat-toolbar style="position: fixed; top: 0; left: 0; width: 100%; z-index: 2;" color="primary">
+  <h1 routerLink="/" style="cursor: pointer;">Contacts</h1>
+  <button mat-icon-button routerLink="/add">
+    <mat-icon>add_circle</mat-icon>
+  </button>
 </mat-toolbar>
-<router-outlet></router-outlet>
+<main>
+  <router-outlet></router-outlet>
+</main>

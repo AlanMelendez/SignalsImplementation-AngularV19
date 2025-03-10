@@ -19,10 +19,15 @@ body {
   margin: 0;
   font-family: Roboto, "Helvetica Neue", sans-serif;
 }
+main{
+  padding-top: 64px; /* Adjust based on toolbar height */
 
+}
 mat-progress-spinner {
+  z-index: 1000;
   position: absolute !important;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
+  background-color: white;
 }

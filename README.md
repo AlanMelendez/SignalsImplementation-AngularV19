@@ -1,59 +1,206 @@
 # SignalsCrudAngularv19
 
 This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 19.2.1.
+# Project Structure
+Key files:
+- [Add Contact Component](./src/app/components/add-contact/add-contact.component.ts)
+- [Add Contact Template](./src/app/components/add-contact/add-contact.component.html)
+- [API Service](./src/app/services/api.service.ts)
 
-## Development server
+# Features in Angular v19
 
-To start a local development server, run:
+<!-- - **Standalone Components**: Simplifies component creation without the need for NgModules.
+- **Typed Forms**: Enhances form handling with strong typing.
+- **Directive Composition API**: Allows combining multiple directives into a single directive.
+- **Improved Server-Side Rendering**: Enhances performance and developer experience.
+- **Enhanced RxJS Integration**: Better handling of reactive programming patterns.
+- **Strictly Typed Reactive Forms**: Ensures type safety in reactive forms.
+- **Optional NgModules**: Reduces boilerplate code by making NgModules optional.
+- **Improved Angular CLI**: Faster build times and enhanced development experience.
+- **Better Error Handling**: More descriptive error messages and stack traces.
+- **Updated Dependency Injection**: More flexible and powerful DI system. -->
 
-```bash
-ng serve
+# Resource Signal
+## What is a Resource in Angular?
+This functionallity allows asynchronous data fetching in our components implementation.
+
+To use a resource in Angular, we need to create a service that fetches data from a server and returns it to the component. We can then use this service in our component to fetch data and display it in the view.
+
+**Syntax:** 
+```typescript
+myResource = resource({
+  request: params,
+  loader: () => Promise<any>,
+});
+
+myResource.value(); // returns the value of the resource
+myResource.isLoading(); // returns boolean status.
+myResource.error(); // returns the error if the resource has an error
+
+```
+# Computed Signal 
+## What is a Computed Signal in Angular?
+This functionallity allows to create a signal that depends on other signals. When the signals it depends on change, the computed signal is automatically updated.
+
+To use a computed signal in Angular, we need to create a signal that depends on other signals. We can then use this signal in our component to display the computed value in the view.
+
+An a Computed Signal is only updated when the signals it depends on change therefore the computed signal is just READ-ONLY.
+
+**Syntax:** 
+```typescript
+mySignal1 = signal(2);
+mySignal2 = signal(2);
+
+
+myComputedSignal = computed(() => {
+  return mySignal1.value() + mySignal2.value(); // 2 + 2 = 4
+});
+
+//Get the value of the computed signal
+myComputedSignal.value(); // returns 4
+
+//If the signals value change, the computed signal will be updated automatically.
+mySignal1.set(3);
+mySignal2.set(3);
+
+myComputedSignal.value(); // returns 6
+
 ```
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
 
-## Code scaffolding
+# Input Signal (@Input & @Output)
+## What is an Input Signal in Angular?
+This functionallity allows to pass data from a parent component to a child component.
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+To use an input signal in Angular, we need to create a signal in the parent component and pass it to the child component using the input() you need declare with default value.
+The input signal automatically updates in the child component when the parent component changes the signal value.
 
-```bash
-ng generate component component-name
+No need use ngOnChanges to detect changes in the input signal. (It's the better way to avoid the use of ngOnChanges)
+
+**Syntax:** 
+```typescript
+//Parent Component
+inputSignal = input<string>('');
+
+//Child Component
+@Input() mySignal: Signal<number>;
+
+//Use the signal in the child component
+this.mySignal.value(); // returns 2
+
 ```
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
 
-```bash
-ng generate --help
+# Writable Signal
+## What is a Writable Signal in Angular?
+
+It's a **writable** signal that dependent on another signal.
+When the signal it depends on changes, the writable signal is automatically updated.
+
+This signal is major used in forms to update the value of the form fields.
+
+**Syntax:** 
+```typescript
+// Reactive signal linked on it's own signal
+mySignal = linkedSignal(()=> this.mySignal());
+
 ```
 
-## Building
+**Example 01:** 
+```typescript
 
-To build the project run:
+  apiService = inject(ApiService);
+  id = input<string('1');
 
-```bash
-ng build
+  name = linkedSignal(() => this.contactResource.value()?.name);
+  email = linkedSignal(() => this.contactResource.value()?.email);
+  phone = linkedSignal(() => this.contactResource.value()?.phone);
+
+   contactResource = resource({
+    request: this.id,
+    loader: ({request: id}) => this.apiService.getContact(Number(id))
+  });
+
 ```
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
+**Example 02:** 
+```typescript
 
-## Running unit tests
+    apiService = inject(ApiService);
+    id = input<string('1');
 
-To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
+   constructor() {
+    //Set data to the form fields with type ContactForm and linked to the contactResource signal
+    this.formData = linkedSignal(() => ({
+      name: this.contactResource.value()?.name || '',
+      email: this.contactResource.value()?.email || '',
+      phone: this.contactResource.value()?.phone || ''
+    }));
+  }
 
-```bash
-ng test
+  // This signal is a object that contains the form fields with type ContactForm
+  protected  formData = signal<ContactForm>({
+    name: '',
+    email: '',
+    phone: ''
+  });
+
+  // Get data from the server
+   contactResource = resource({
+    request: this.id,
+    loader: ({request: id}) => this.apiService.getContact(Number(id))
+  });
+
 ```
 
-## Running end-to-end tests
+# Effects
+## What is an Effect in Angular?
 
-For end-to-end (e2e) testing, run:
+An effect is a function that performs a side effect when a signal changes. (do something when a signal changes) 
+It is used to perform asynchronous operations such as fetching data from a server, updating the DOM, or dispatching actions to the store.
 
-```bash
-ng e2e
+These effect ever need be used in a component or service, declared in the constructor or within a function.
+
+**Syntax:** 
+```typescript
+
+mySignal = signal(2);
+
+public checkChanges = effect(() => {
+  const value = this.mySignal(); // Maybe you want to do something with the value (was changed to 3, for example...)
+
+  //Do something when the signal changes
+  console.log('Signal has changed to: ', value);
+});
+
 ```
 
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
+**Example:** show toasts when a Fetch API has error response.
+```typescript
 
-## Additional Resources
+  // Get data from the server
+   contactResource = resource({
+    request: this.id,
+    loader: ({request: id}) => this.apiService.getContact(Number(id))
+  });
+ 
+  showErrorMessage = effect(() => {
+     const error = this.contactsResource.error();
+     if (error) {
+       this.messageService.add({severity:'error', summary:'Error', detail: "Error fetching contacts"});
+     }
+  });
+```
+## Screenshots
 
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+### Contact List
+![Contact List](./public/screenshots/contactList.png)
+
+### Edit Contact
+![Edit Contact](./public/screenshots/editContact.png)
+
+### Add Contact
+![Add Contact](./public/screenshots/addContact.png)
+
+
+

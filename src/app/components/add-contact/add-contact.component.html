@@ -1,0 +1,41 @@
+<div style="width: 100%; display: flex; justify-content: center; align-content: center; align-items: center; flex-direction: column;">
+
+    @if(loadingSave()) { 
+        <mat-progress-spinner mode="indeterminate"></mat-progress-spinner>
+    }@else {
+        <h2>Add Contact</h2>
+        <form style="display: flex; flex-direction: column; width: 50%;" (ngSubmit)="addContact()">
+            <mat-form-field>
+                <mat-label>Name</mat-label>
+                <input matInput 
+                       placeholder="Name" 
+                       required 
+                       [(ngModel)]="formData().name" 
+                       name="name"> 
+            </mat-form-field>
+            <mat-form-field>
+                <mat-label>Email</mat-label>
+                <input matInput 
+                       placeholder="Email" 
+                       required 
+                       [(ngModel)]="formData().email" 
+                       name="email">
+            </mat-form-field>
+            <mat-form-field>
+                <mat-label>Phone</mat-label>
+                <input matInput 
+                       placeholder="Phone" 
+                       required 
+                       [(ngModel)]="formData().phone" 
+                       name="phone">
+            </mat-form-field>
+        
+            <div class="container-buttons">
+                <button type="submit" mat-flat-button color="primary">Add</button>
+                <button type="button" mat-raised-button color="warn" routerLink="/">Cancel</button>
+            </div>
+        </form>
+    }
+    
+    <p-toast/>
+    </div>
