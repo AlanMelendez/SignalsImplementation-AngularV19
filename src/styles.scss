@@ -19,6 +19,10 @@ body {
   margin: 0;
   font-family: Roboto, "Helvetica Neue", sans-serif;
 }
+main{
+  padding-top: 64px; /* Adjust based on toolbar height */
+
+}
 // .mat-progress-wrapper{ 
 //   position: absolute !important;
 //   z-index: -1;
