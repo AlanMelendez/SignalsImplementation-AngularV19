@@ -1,0 +1,10 @@
+<mat-list>
+  
+  @for (contact of contacts(); track contact.id) {
+    <mat-list-item class="contact">
+      <h3 matListItemTitle>{{ contact.name }}</h3>
+      <p matListItemLine>{{ contact.email }}</p>
+      <p matListItemLine>{{ contact.phone }}</p>
+    </mat-list-item>
+  }
+</mat-list>  
