@@ -10,6 +10,13 @@ import { ApiService } from '../../services/api.service';
 import { MatProgressSpinner } from '@angular/material/progress-spinner';
 import { ToastModule } from 'primeng/toast';
 import { MessageService } from 'primeng/api';
+
+interface ContactForm {
+  name: string;
+  email: string;
+  phone: string;
+}
+
 @Component({
   selector: 'app-add-contact',
   imports: [
@@ -28,48 +35,83 @@ import { MessageService } from 'primeng/api';
   providers: [MessageService]
 })
 export class AddContactComponent {
-  apiService = inject(ApiService);
-  router = inject(Router);
-  messageService = inject(MessageService);
+  private readonly apiService = inject(ApiService);
+  private readonly router = inject(Router);
+  private readonly messageService = inject(MessageService);
 
-  name = signal<string>(''); 
-  email = signal<string>('');
-  phone = signal<string>('');
+  protected readonly formData = signal<ContactForm>({
+    name: '',
+    email: '',
+    phone: ''
+  });
+  protected readonly loadingSave = signal<boolean>(false);
 
-  loadingSave = signal<boolean>(false);
-
-  async addContact() {
-    if(!this.validateForm()) {
+  async addContact(): Promise<void> {
+    if (!this.isFormValid()) {
       return;
     }
 
-    this.loadingSave.set(true);
-    await this.apiService.addContact({
-      id: Math.random(),
-      name: this.name(),
-      email: this.email(),
-      phone: this.phone(),
-    });
-    this.messageService.add({severity: 'success', summary: 'Success', detail: 'Contact added successfully'});
-    setTimeout(() => {
+    try {
+      this.loadingSave.set(true);
+      await this.saveContact();
+      this.showSuccessMessage();
+      await this.redirectToHome();
+    } catch (error) {
+      this.showErrorMessage(error);
+    } finally {
       this.loadingSave.set(false);
-    this.router.navigate(['/']);
-    }, 1000);
+    }
   }
 
-
-  validateForm() {
-    //Anyone of the fields not must been empty to enable the save button
+  private isFormValid(): boolean {
+    const { name, email, phone } = this.formData();
     
-    if(this.name() === '' || this.email() === '' || this.phone() === '') {
-      this.messageService.add({severity: 'error', summary: 'Error', detail: 'All fields are required'});
-            return false;
+    if (!name || !email || !phone) {
+      this.messageService.add({
+        severity: 'error',
+        summary: 'Error',
+        detail: 'All fields are required'
+      });
+      return false;
     }
 
     return true;
-
-
   }
 
+  private async saveContact(): Promise<void> {
+    const { name, email, phone } = this.formData();
+    await this.apiService.addContact({
+      id: this.generateId(),
+      name,
+      email,
+      phone,
+    });
+  }
+
+  private generateId(): number {
+    return Math.floor(Math.random() * 10000);
+  }
+
+  private showSuccessMessage(): void {
+    this.messageService.add({
+      severity: 'success',
+      summary: 'Success',
+      detail: 'Contact added successfully'
+    });
+  }
+
+  private showErrorMessage(error: unknown): void {
+    this.messageService.add({
+      severity: 'error',
+      summary: 'Error',
+      detail: 'Failed to add contact'
+    });
+    console.error('Error adding contact:', error);
+  }
+
+  private async redirectToHome(): Promise<void> {
+    await new Promise(resolve => setTimeout(resolve, 1000));
+    await this.router.navigate(['/']);
+  }
 
 }
