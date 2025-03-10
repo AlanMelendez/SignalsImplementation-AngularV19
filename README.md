@@ -39,6 +39,8 @@ This functionallity allows to create a signal that depends on other signals. Whe
 
 To use a computed signal in Angular, we need to create a signal that depends on other signals. We can then use this signal in our component to display the computed value in the view.
 
+An a Computed Signal is only updated when the signals it depends on change therefore the computed signal is just READ-ONLY.
+
 **Syntax:** 
 ```typescript
 mySignal1 = signal(2);

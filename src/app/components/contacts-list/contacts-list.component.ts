@@ -1,4 +1,4 @@
-import { Component, inject, resource, signal } from '@angular/core';
+import { Component, computed, inject, resource, signal } from '@angular/core';
 import { Contact } from '../../models/contact';
 import { CommonModule } from '@angular/common';
 import { MatListModule } from '@angular/material/list';
@@ -16,6 +16,8 @@ import { MatButtonModule } from '@angular/material/button';
 export class ContactsListComponent {
   apiService = inject(ApiService);
   deletingSignal = signal<boolean>(false);
+
+  loadingSignal = computed(() => this.contactsResource.isLoading() || this.deletingSignal());
 
   contactsResource = resource({
     loader: () => this.apiService.getContacts(),

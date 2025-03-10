@@ -17,7 +17,7 @@
   }
 </mat-list> 
 
-@if(contactsResource.isLoading() || this.deletingSignal()  ) { 
+@if(loadingSignal()) { 
   <div class="mat-progress-wrapper">
     <mat-progress-spinner mode="indeterminate"></mat-progress-spinner>
   </div>

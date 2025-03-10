@@ -19,13 +19,13 @@ body {
   margin: 0;
   font-family: Roboto, "Helvetica Neue", sans-serif;
 }
-.mat-progress-wrapper{ 
-  position: absolute !important;
-  z-index: -1;
-  background-color: transparent; 
-  width: 100% !important;
-  height: 100% !important;
-}
+// .mat-progress-wrapper{ 
+//   position: absolute !important;
+//   z-index: -1;
+//   background-color: transparent; 
+//   width: 100% !important;
+//   height: 100% !important;
+// }
 mat-progress-spinner {
   z-index: 1000;
   position: absolute !important;
