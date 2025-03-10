@@ -44,7 +44,6 @@ export class EditContactComponent {
 
  private readonly router = inject(Router);
   private readonly messageService = inject(MessageService);
-
   protected  formData = signal<ContactForm>({
     name: '',
     email: '',
@@ -93,7 +92,6 @@ export class EditContactComponent {
 
     return true;
   }
-
   private async saveContact(): Promise<void> {
     const { name, email, phone } = this.formData();
     await this.apiService.updateContact({
